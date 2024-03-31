@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>공학용 계산기</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f5f5f5;
+  }
+  .calculator {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .calculator-screen {
+    width: 100%;
+    margin-bottom: 10px;
+    height: 40px;
+    text-align: right;
+    border: none;
+    background-color: #e6e6e6;
+    color: #333;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  .button {
+    height: 40px;
+    width: 60px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+  }
+  .operator {
+    color: #fff;
+    background-color: #f0ad4e;
+  }
+  .number, .equal-sign {
+    color: #fff;
+    background-color: #5bc0de;
+  }
+</style>
+</head>
+<body>
+<div class="calculator">
+  <input type="text" readonly class="calculator-screen" value="" id="screen">
+
+  <div class="buttons">
+    <button class="button number" onclick="appendNumber('7')">7</button>
+    <button class="button number" onclick="appendNumber('8')">8</button>
+    <button class="button number" onclick="appendNumber('9')">9</button>
+    <button class="button operator" onclick="chooseOp('/')">/</button><br>
+    
+    <button class="button number" onclick="appendNumber('4')">4</button>
+    <button class="button number" onclick="appendNumber('5')">5</button>
+    <button class="button number" onclick="appendNumber('6')">6</button>
+    <button class="button operator" onclick="chooseOp('*')">*</button><br>
+
+    <button class="button number" onclick="appendNumber('1')">1</button>
+    <button class="button number" onclick="appendNumber('2')">2</button>
+    <button class="button number" onclick="appendNumber('3')">3</button>
+    <button class="button operator" onclick="chooseOp('-')">-</button><br>
+
+    <button class="button number" onclick="appendNumber('0')">0</button>
+    <button class="button number" onclick="appendNumber('.')">.</button>
+    <button class="button equal-sign" onclick="compute()">=</button>
+    <button class="button operator" onclick="chooseOp('+')">+</button>
+  </div>
+</div>
+
+<script>
+let currentOp = '';
+let prevOperand = '';
+let newOp = true;
+
+function appendNumber(number) {
+  if (newOp) {
+    document.getElementById('screen').value = number;
+    newOp = false;
+  } else {
+    document.getElementById('screen').value += number;
+  }
+}
+
+function chooseOp(operator) {
+  if (!newOp) {
+    compute();
+  }
+  prevOperand = document.getElementById('screen').value;
+  currentOp = operator;
+  newOp = true;
+}
+
+function compute() {
+  const currentOperand = document.getElementById('screen').value;
+  let computation;
+  const prev = parseFloat(prevOperand);
+  const current = parseFloat(currentOperand);
+  if (isNaN(prev) || isNaN(current)) return;
+  switch (currentOp) {
+    case '+':
+      computation = prev + current;
+      break;
+    case '-':
+      computation = prev - current;
+      break;
+    case '*':
+      computation = prev * current;
+      break;
+    case '/':
+      computation = prev / current;
+      break;
+    default:
+      return;
+  }
+  document.getElementById('screen').value = computation;
+  prevOperand = computation;
+  currentOp = undefined;
+  newOp = true;
+}
+</script>
+</body>
+</html>
